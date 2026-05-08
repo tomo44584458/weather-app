@@ -249,12 +249,16 @@ button:focus-visible {
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 244, 216, 0.9));
 }
 
-.headache-card {
+.alert-card {
   border-color: rgba(35, 119, 209, 0.18);
   background: rgba(255, 255, 255, 0.92);
 }
 
-.headache-card.is-caution {
+.alert-card h2 {
+  color: var(--danger);
+}
+
+.alert-card.is-caution {
   border-color: rgba(223, 77, 95, 0.35);
   background: rgba(255, 241, 243, 0.94);
 }
@@ -279,7 +283,7 @@ button:focus-visible {
   white-space: nowrap;
 }
 
-.headache-card.is-caution .risk-level {
+.alert-card.is-caution .risk-level {
   color: #fff;
   background: var(--danger);
 }

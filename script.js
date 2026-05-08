@@ -50,7 +50,7 @@ const elements = {
   pressure: document.getElementById('pressure'),
   pressureChange: document.getElementById('pressure-change'),
   clothingAdvice: document.getElementById('clothing-advice'),
-  headacheCard: document.getElementById('headache-card'),
+  headacheAlert: document.getElementById('headache-alert'),
   headacheProbability: document.getElementById('headache-probability'),
   headacheReason: document.getElementById('headache-reason'),
   headacheLevel: document.getElementById('headache-level'),
@@ -182,7 +182,7 @@ function updateHeadacheRisk(risk) {
   elements.headacheLevel.textContent = risk.level;
   elements.headacheMeter.style.width = `${risk.probability}%`;
   elements.headacheCaution.hidden = !risk.isCaution;
-  elements.headacheCard.classList.toggle('is-caution', risk.isCaution);
+  elements.headacheAlert.classList.toggle('is-caution', risk.isCaution);
 }
 
 function buildForecastUrl(location) {
