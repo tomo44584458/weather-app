@@ -82,9 +82,20 @@
         <h2>おすすめの服装</h2>
         <p id="clothing-advice">気温データを取得しています。</p>
       </article>
-      <article id="headache-alert" class="advice card alert-card" hidden>
-        <h2>頭痛注意</h2>
-        <p>気圧の変化が大きい予報です。無理をせず、予定や休憩の取り方を調整する参考にしてください。</p>
+      <article id="headache-card" class="advice card headache-card" aria-labelledby="headache-title">
+        <div class="headache-header">
+          <div>
+            <p class="eyebrow">Weather Based Reference</p>
+            <h2 id="headache-title">頭痛確率</h2>
+          </div>
+          <span id="headache-level" class="risk-level">判定中</span>
+        </div>
+        <div class="risk-meter" aria-hidden="true">
+          <span id="headache-meter"></span>
+        </div>
+        <strong id="headache-probability" class="risk-percent">--%</strong>
+        <p id="headache-reason">気圧・湿度・降水確率から参考値を計算します。</p>
+        <p id="headache-caution" class="headache-caution" hidden>頭痛注意: 気圧の変化が大きい予報です。無理をせず、予定や休憩の取り方を調整する参考にしてください。</p>
       </article>
     </section>
 
