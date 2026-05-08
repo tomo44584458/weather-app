@@ -179,10 +179,16 @@ function updateWeather(data, location) {
 
   if (pressureChange === null) {
     elements.pressureChange.textContent = '気圧変化データが不足しています。';
-    elements.headacheAlert.hidden = true;
+
+    if (elements.headacheAlert) {
+      elements.headacheAlert.hidden = true;
+    }
   } else {
     elements.pressureChange.textContent = `今日の気圧差: 約${pressureChange.toFixed(1)} hPa`;
-    elements.headacheAlert.hidden = pressureChange < PRESSURE_CHANGE_ALERT_HPA;
+
+    if (elements.headacheAlert) {
+      elements.headacheAlert.hidden = pressureChange < PRESSURE_CHANGE_ALERT_HPA;
+    }
   }
 
   elements.statusMessage.classList.remove('is-error');
@@ -201,9 +207,15 @@ async function fetchWeather() {
     }
 
     const data = await response.json();
-    updateWeather(data, location);
+
+    try {
+      updateWeather(data, location);
+    } catch (error) {
+      console.error('Weather data rendering failed:', error);
+      showError('天気データの表示更新に失敗しました。ページを再読み込みして、もう一度お試しください。');
+    }
   } catch (error) {
-    console.error(error);
+    console.error('Weather data fetch failed:', error);
     showError('天気データを取得できませんでした。通信環境を確認して、もう一度お試しください。');
   } finally {
     clearLoadingState();
