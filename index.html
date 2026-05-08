@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Open-Meteo APIを使った、GitHub Pagesで公開できる静的な天気予報アプリです。">
+  <title>そらコーデ | 天気と服装の目安</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero card" aria-labelledby="app-title">
+      <div>
+        <p class="eyebrow">Open-Meteo Weather Forecast</p>
+        <h1 id="app-title">そらコーデ</h1>
+        <p class="lead">天気・気温・気圧から、今日の服装と持ち物をさっと確認できます。</p>
+      </div>
+      <div class="location-panel" aria-label="表示地点">
+        <label for="location-select">地点</label>
+        <div class="select-row">
+          <select id="location-select">
+            <option value="tokyo" selected>東京</option>
+            <option value="osaka">大阪</option>
+            <option value="sapporo">札幌</option>
+            <option value="fukuoka">福岡</option>
+            <option value="naha">那覇</option>
+          </select>
+          <button id="refresh-button" type="button">更新</button>
+        </div>
+        <p id="updated-at" class="updated-at">読み込み中...</p>
+      </div>
+    </section>
+
+    <section id="status-message" class="status" role="status" aria-live="polite">東京の天気を取得しています。</section>
+
+    <section class="weather-grid" aria-label="今日の天気データ">
+      <article class="weather-summary card">
+        <div class="summary-header">
+          <div>
+            <p id="forecast-date" class="eyebrow">今日</p>
+            <h2 id="city-name">東京</h2>
+          </div>
+          <div id="weather-icon" class="weather-icon" aria-hidden="true">☀️</div>
+        </div>
+        <p id="weather-description" class="weather-description">天気を判定中です。</p>
+        <div class="temperature-band">
+          <div>
+            <span class="metric-label">最高</span>
+            <strong id="max-temp">--℃</strong>
+          </div>
+          <div>
+            <span class="metric-label">最低</span>
+            <strong id="min-temp">--℃</strong>
+          </div>
+        </div>
+      </article>
+
+      <article class="metric card">
+        <span class="metric-icon">☔</span>
+        <span class="metric-label">降水確率</span>
+        <strong id="rain-probability">--%</strong>
+        <p id="umbrella-tip">データ取得後に表示します。</p>
+      </article>
+
+      <article class="metric card">
+        <span class="metric-icon">💧</span>
+        <span class="metric-label">平均湿度</span>
+        <strong id="humidity">--%</strong>
+        <p>乾燥・蒸し暑さの目安にしてください。</p>
+      </article>
+
+      <article class="metric card">
+        <span class="metric-icon">🌀</span>
+        <span class="metric-label">平均気圧</span>
+        <strong id="pressure">-- hPa</strong>
+        <p id="pressure-change">気圧変化を確認中です。</p>
+      </article>
+    </section>
+
+    <section class="advice-grid">
+      <article class="advice card highlight">
+        <h2>おすすめの服装</h2>
+        <p id="clothing-advice">気温データを取得しています。</p>
+      </article>
+      <article id="headache-alert" class="advice card alert-card" hidden>
+        <h2>頭痛注意</h2>
+        <p>気圧の変化が大きい予報です。無理をせず、予定や休憩の取り方を調整する参考にしてください。</p>
+      </article>
+    </section>
+
+    <section class="notice card" aria-label="注意事項">
+      <h2>ご利用前の注意</h2>
+      <p>このアプリの服装・傘・頭痛注意の表示は、Open-Meteo APIの天気データに基づく参考情報です。医療診断や治療の助言ではありません。体調に不安がある場合は医療機関などの専門家に相談してください。</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
