@@ -32,6 +32,7 @@ const WEATHER_CODES = {
 
 const PRESSURE_CHANGE_ALERT_HPA = 8;
 const HIGH_RAIN_PROBABILITY = 50;
+const HIGH_HUMIDITY_PERCENT = 80;
 
 const elements = {
   locationSelect: document.getElementById('location-select'),
@@ -50,7 +51,11 @@ const elements = {
   pressure: document.getElementById('pressure'),
   pressureChange: document.getElementById('pressure-change'),
   clothingAdvice: document.getElementById('clothing-advice'),
-  headacheAlert: document.getElementById('headache-alert')
+  headacheLevel: document.getElementById('headache-level'),
+  headacheMeter: document.getElementById('headache-meter'),
+  headacheProbability: document.getElementById('headache-probability'),
+  headacheReason: document.getElementById('headache-reason'),
+  headacheCaution: document.getElementById('headache-caution')
 };
 
 function formatNumber(value, unit = '') {
@@ -120,6 +125,49 @@ function calculatePressureChange(hourlyTimes, hourlyPressures, targetDate) {
   return Math.max(...pressuresForDay) - Math.min(...pressuresForDay);
 }
 
+function calculateHeadacheRisk(pressureChange, humidity, rainProbability) {
+  const safeHumidity = Number.isFinite(humidity) ? humidity : 60;
+  const safeRainProbability = Number.isFinite(rainProbability) ? rainProbability : 0;
+  const pressureScore = pressureChange === null ? 20 : Math.min(pressureChange * 7, 70);
+  const humidityScore = safeHumidity >= HIGH_HUMIDITY_PERCENT ? 12 : Math.max((safeHumidity - 60) * 0.4, 0);
+  const rainScore = safeRainProbability >= HIGH_RAIN_PROBABILITY ? 14 : Math.max(safeRainProbability * 0.18, 0);
+  const probability = Math.min(Math.round(pressureScore + humidityScore + rainScore), 95);
+
+  if (pressureChange === null) {
+    return {
+      probability,
+      level: 'データ不足',
+      reason: '気圧変化データが不足しているため、湿度・降水確率を中心に参考値を表示しています。',
+      showCaution: false
+    };
+  }
+
+  if (probability >= 70 || pressureChange >= PRESSURE_CHANGE_ALERT_HPA) {
+    return {
+      probability,
+      level: '高め',
+      reason: `気圧差が約${pressureChange.toFixed(1)} hPaあり、湿度・降水確率も含めて注意度が高めです。`,
+      showCaution: true
+    };
+  }
+
+  if (probability >= 45) {
+    return {
+      probability,
+      level: 'やや高め',
+      reason: `気圧差は約${pressureChange.toFixed(1)} hPaです。体調の変化に気づけるよう、休憩の余裕を持つと安心です。`,
+      showCaution: false
+    };
+  }
+
+  return {
+    probability,
+    level: '低め',
+    reason: `気圧差は約${pressureChange.toFixed(1)} hPaで、頭痛リスクは低めの参考値です。`,
+    showCaution: false
+  };
+}
+
 function buildForecastUrl(location) {
   const params = new URLSearchParams({
     latitude: location.latitude,
@@ -177,13 +225,19 @@ function updateWeather(data, location) {
   elements.clothingAdvice.textContent = getClothingAdvice(maxTemp, minTemp);
   elements.updatedAt.textContent = `最終更新: ${updatedAt}`;
 
+  const headacheRisk = calculateHeadacheRisk(pressureChange, humidity, rainProbability);
+
   if (pressureChange === null) {
     elements.pressureChange.textContent = '気圧変化データが不足しています。';
-    elements.headacheAlert.hidden = true;
   } else {
     elements.pressureChange.textContent = `今日の気圧差: 約${pressureChange.toFixed(1)} hPa`;
-    elements.headacheAlert.hidden = pressureChange < PRESSURE_CHANGE_ALERT_HPA;
   }
+
+  elements.headacheLevel.textContent = headacheRisk.level;
+  elements.headacheMeter.style.width = `${headacheRisk.probability}%`;
+  elements.headacheProbability.textContent = `${headacheRisk.probability}%`;
+  elements.headacheReason.textContent = headacheRisk.reason;
+  elements.headacheCaution.hidden = !headacheRisk.showCaution;
 
   elements.statusMessage.classList.remove('is-error');
   elements.statusMessage.textContent = `${location.name}の最新予報を表示しています。`;
