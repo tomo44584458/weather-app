@@ -1,6 +1,8 @@
 const LOCATIONS = {
   tokyo: { name: '東京', latitude: 35.6762, longitude: 139.6503, timezone: 'Asia/Tokyo' },
   osaka: { name: '大阪', latitude: 34.6937, longitude: 135.5023, timezone: 'Asia/Tokyo' },
+  kurashiki: { name: '倉敷', latitude: 34.585, longitude: 133.772, timezone: 'Asia/Tokyo' },
+  ehime: { name: '愛媛', latitude: 33.8416, longitude: 132.7661, timezone: 'Asia/Tokyo' },
   sapporo: { name: '札幌', latitude: 43.0618, longitude: 141.3545, timezone: 'Asia/Tokyo' },
   fukuoka: { name: '福岡', latitude: 33.5902, longitude: 130.4017, timezone: 'Asia/Tokyo' },
   naha: { name: '那覇', latitude: 26.2124, longitude: 127.6792, timezone: 'Asia/Tokyo' }
